@@ -25,7 +25,7 @@ OrderedDictionary<int, string> dictionary = new OrderedDictionary<int, string>
 };
 ```
 
-Like a dictionary, items can by accessed by key. You can also use the `ByIndex` property to access an item using a 0-based index.
+Like a dictionary, items can by accessed by key. They can also be accessed using a 0-based index. Because it's possible for the key to be of type `int`, you use the `ByIndex` property to access an item using an index.
 
 ```cs
 Assert.AreEqual("Gary Wilson", dictionary[127]);
