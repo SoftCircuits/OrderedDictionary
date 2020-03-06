@@ -10,7 +10,7 @@ Install-Package SoftCircuits.OrderedDictionary
 
 OrderedDictionary is a .NET library that implements an ordered dictionary. It provides all the functionality of `Dictionary<TKey, TValue>` but also maintains the items in an ordered list. Items can be added, removed and accessed by key or index. The class implements IDictionary.
 
-## Example
+## Examples
 
 OrderedDictionary can be initialized used like any other dictionary.
 
@@ -25,11 +25,33 @@ OrderedDictionary<int, string> dictionary = new OrderedDictionary<int, string>
 };
 ```
 
-Like a dictionary, items can by accessed by key. You can also use the `ByIndex` property to access an item by index.
+Like a dictionary, items can by accessed by key. You can also use the `ByIndex` property to access an item by a 0-based index.
 
 ```cs
-Debug.Assert(dictionary[127] == "Gary Wilson");
-Debug.Assert(dictionary.ByIndex[3] == "Add Carpenter");
+Assert.AreEqual("Gary Wilson", dictionary[127]);
+Assert.AreEqual("Bill Jackson", dictionary.ByIndex[3]);
 ```
 
+You can add items using the `Add()` method, and you can also insert them at a particular location.
 
+```cs
+OrderedDictionary<int, string> dictionary = new OrderedDictionary<int, string>();
+
+dictionary.Add(101, "Bob Smith");
+dictionary.Add(127, "Gary Wilson");
+dictionary.Add(187, "Bill Jackson");
+dictionary.Add(214, "Cheryl Hansen");
+
+dictionary.Insert(2, 134, "Add Carpenter");
+
+Assert.AreEqual("Bob Smith", dictionary[101]);
+Assert.AreEqual("Bob Smith", dictionary.ByIndex[0]);
+Assert.AreEqual("Gary Wilson", dictionary[127]);
+Assert.AreEqual("Gary Wilson", dictionary.ByIndex[1]);
+Assert.AreEqual("Add Carpenter", dictionary[134]);
+Assert.AreEqual("Add Carpenter", dictionary.ByIndex[2]);
+Assert.AreEqual("Bill Jackson", dictionary[187]);
+Assert.AreEqual("Bill Jackson", dictionary.ByIndex[3]);
+Assert.AreEqual("Cheryl Hansen", dictionary[214]);
+Assert.AreEqual("Cheryl Hansen", dictionary.ByIndex[4]);
+```
