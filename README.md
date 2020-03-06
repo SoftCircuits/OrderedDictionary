@@ -55,3 +55,26 @@ Assert.AreEqual("Bill Jackson", dictionary.ByIndex[3]);
 Assert.AreEqual("Cheryl Hansen", dictionary[214]);
 Assert.AreEqual("Cheryl Hansen", dictionary.ByIndex[4]);
 ```
+
+Items can also be removed by either key or index.
+
+```cs
+OrderedDictionary<int, string> dictionary = new OrderedDictionary<int, string>
+{
+    [101] = "Bob Smith",
+    [127] = "Gary Wilson",
+    [134] = "Ann Carpenter",
+    [187] = "Bill Jackson",
+    [214] = "Cheryl Hansen",
+};
+
+dictionary.Remove(134);
+dictionary.RemoveAt(2); // Removes 187 - Bill Jackson
+
+Assert.AreEqual(5 - 2, dictionary.Count);
+Assert.IsTrue(dictionary.ContainsKey(101));
+Assert.IsTrue(dictionary.ContainsKey(127));
+Assert.IsFalse(dictionary.ContainsKey(134));
+Assert.IsFalse(dictionary.ContainsKey(187));
+Assert.IsTrue(dictionary.ContainsKey(214));
+```
