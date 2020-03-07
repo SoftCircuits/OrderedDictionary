@@ -8,11 +8,11 @@ Install-Package SoftCircuits.OrderedDictionary
 
 ## Introduction
 
-OrderedDictionary is a .NET library that implements an ordered dictionary. It provides all the functionality of `Dictionary<TKey, TValue>` but also maintains the items in an ordered list. Items can be added, removed and accessed by key or index. The class implements IDictionary.
+OrderedDictionary is a .NET library that implements an ordered dictionary. It provides all the functionality of `Dictionary<TKey, TValue>` but also maintains the items in an ordered list. Items can be added, removed and accessed by key or index. The class implements the `IDictionary` interface.
 
 ## Examples
 
-OrderedDictionary can be initialized used like any other dictionary.
+OrderedDictionary can be initialized used like any other dictionary. This includes initializing with *index initializers*.
 
 ```cs
 OrderedDictionary<int, string> dictionary = new OrderedDictionary<int, string>
@@ -25,7 +25,7 @@ OrderedDictionary<int, string> dictionary = new OrderedDictionary<int, string>
 };
 ```
 
-Like a dictionary, items can by accessed by key. They can also be accessed using a 0-based index. Because it's possible for the key to be of type `int`, you use the `ByIndex` property to access an item using an index. This removes any ambiguity about whether a value refers to an index or key.
+Like a dictionary, items can by accessed by key. They can also be accessed using a 0-based index. Because it's possible for the key to be of type `int`, the `ByIndex` property is used to access an item using an index. This prevents any ambiguity between key and index values.
 
 ```cs
 Assert.AreEqual("Gary Wilson", dictionary[127]);
@@ -56,7 +56,7 @@ Assert.AreEqual("Cheryl Hansen", dictionary[214]);
 Assert.AreEqual("Cheryl Hansen", dictionary.ByIndex[4]);
 ```
 
-Items can also be removed by either key or index.
+Items can also be removed using either the key or index.
 
 ```cs
 OrderedDictionary<int, string> dictionary = new OrderedDictionary<int, string>
@@ -78,3 +78,5 @@ Assert.IsFalse(dictionary.ContainsKey(134));
 Assert.IsFalse(dictionary.ContainsKey(187));
 Assert.IsTrue(dictionary.ContainsKey(214));
 ```
+
+The library also implements several versions of the extension method `ToOrderedList()`, which will convert any `IEnumerable<>` to an `OrderedDictionary<>`.
