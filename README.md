@@ -79,4 +79,4 @@ Assert.IsFalse(dictionary.ContainsKey(187));
 Assert.IsTrue(dictionary.ContainsKey(214));
 ```
 
-The library also implements several versions of the extension method `ToOrderedList()`, which will convert any `IEnumerable<>` to an `OrderedDictionary<>`.
+The library also implements several versions of the `ToOrderedList()` extension method, which will convert any `IEnumerable<>` to an `OrderedDictionary<>`.
