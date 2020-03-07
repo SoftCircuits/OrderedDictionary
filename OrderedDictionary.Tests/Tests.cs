@@ -148,8 +148,7 @@ namespace OrderedDictionary.Tests
         [TestMethod]
         public void TestInsert()
         {
-            var dictionary = new OrderedDictionary<string, string>();
-            TestData.ForEach(x => dictionary.Add(x.Item1, x.Item2));
+            var dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
 
             dictionary.Insert(0, "0", "00");
             dictionary.Insert(10, "10", "1010");
@@ -181,8 +180,7 @@ namespace OrderedDictionary.Tests
         [TestMethod]
         public void TestAccess()
         {
-            var dictionary =  new OrderedDictionary<string, string>();
-            TestData.ForEach(x => dictionary.Add(x.Item1, x.Item2));
+            var dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
 
             Assert.AreEqual(TestData.Count, dictionary.Count);
             Assert.AreEqual(0, dictionary.IndexOf("a"));
@@ -208,13 +206,18 @@ namespace OrderedDictionary.Tests
             Assert.IsFalse(dictionary.TryGetValue("x", out string _));
             Assert.IsFalse(dictionary.TryGetValue("y", out string _));
             Assert.IsFalse(dictionary.TryGetValue("z", out string _));
+
+            // Write test
+            dictionary["a"] = "Test1";
+            Assert.AreEqual("Test1", dictionary["a"]);
+            dictionary.ByIndex[4] = "Test2";
+            Assert.AreEqual("Test2", dictionary.ByIndex[4]);
         }
 
         [TestMethod]
         public void TestRemove()
         {
-            var dictionary = new OrderedDictionary<string, string>();
-            TestData.ForEach(x => dictionary.Add(x.Item1, x.Item2));
+            var dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
             string result;
 
             // Remove
@@ -272,8 +275,7 @@ namespace OrderedDictionary.Tests
         [TestMethod]
         public void TestKeysAndValues()
         {
-            var dictionary = new OrderedDictionary<string, string>();
-            TestData.ForEach(x => dictionary.Add(x.Item1, x.Item2));
+            var dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
 
             List<string> keys = dictionary.Keys.ToList();
             List<string> values = dictionary.Values.ToList();
@@ -287,8 +289,7 @@ namespace OrderedDictionary.Tests
         [TestMethod]
         public void TestEnumerator()
         {
-            var dictionary = new OrderedDictionary<string, string>();
-            TestData.ForEach(x => dictionary.Add(x.Item1, x.Item2));
+            var dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
 
             int i = 0;
             foreach (var x in dictionary)

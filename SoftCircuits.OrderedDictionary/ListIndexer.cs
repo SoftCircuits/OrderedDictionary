@@ -9,11 +9,11 @@ namespace SoftCircuits.Collections
     /// Wraps a <see cref="List{T}"></see> object and exposes only its
     /// indexer property.
     /// </summary>
-    public class Indexer<T>
+    public class ListIndexer<T>
     {
-        readonly List<T> Items;
+        private readonly List<T> Items;
 
-        internal Indexer(List<T> items)
+        internal ListIndexer(List<T> items)
         {
             Items = items;
         }

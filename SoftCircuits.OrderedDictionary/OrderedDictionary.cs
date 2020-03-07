@@ -20,7 +20,7 @@ namespace SoftCircuits.Collections
         /// <summary>
         /// Gets or sets an item value using its 0-based, ordered index number.
         /// </summary>
-        public Indexer<TValue> ByIndex { get; }
+        public ListIndexer<TValue> ByIndex { get; }
 
         /// <summary>
         /// Constructs a new <see cref="OrderedDictionary{TKey, TValue}"></see>
@@ -30,7 +30,7 @@ namespace SoftCircuits.Collections
         {
             Items = new List<TValue>();
             IndexLookup = new Dictionary<TKey, int>();
-            ByIndex = new Indexer<TValue>(Items);
+            ByIndex = new ListIndexer<TValue>(Items);
         }
 
         /// <summary>
@@ -224,10 +224,10 @@ namespace SoftCircuits.Collections
         {
             if (array == null)
                 throw new ArgumentNullException(nameof(array));
-            if (index < 0 || index >= array.Length)
+            if (index < 0 || index > array.Length)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (index + Count > array.Length)
-                throw new ArgumentException("Array is not large enough to copy items.");
+                throw new ArgumentException("Target array is not large enough to copy items.");
 
             foreach (KeyValuePair<TKey, int> pair in IndexLookup)
                 array[index++] = new KeyValuePair<TKey, TValue>(pair.Key, Items[pair.Value]);
@@ -295,5 +295,10 @@ namespace SoftCircuits.Collections
             }
             IndexLookup.Add(key, index);
         }
+
+
+
     }
+
+
 }
