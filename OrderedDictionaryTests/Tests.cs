@@ -1,12 +1,10 @@
-﻿// Copyright (c) 2020 Jonathan Wood (www.softcircuits.com)
-// Licensed under the MIT license.
-//
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SoftCircuits.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OrderedDictionary.Tests
+namespace OrderedDictionaryTests
 {
     [TestClass]
     public class Tests
@@ -21,10 +19,10 @@ namespace OrderedDictionary.Tests
             {
                 TestData.Add((c.ToString(), new string(new char[]
                 {
-                    c,
-                    (char)(c + 1),
-                    (char)(c + 2),
-                    (char)(c + 3),
+                c,
+                (char)(c + 1),
+                (char)(c + 2),
+                (char)(c + 3),
                 })));
             }
         }
@@ -76,13 +74,13 @@ namespace OrderedDictionary.Tests
 
             // Add range
             List<KeyValuePair<int, string>> temp = new List<KeyValuePair<int, string>>
-            {
-                new KeyValuePair<int, string>(401, "401"),
-                new KeyValuePair<int, string>(402, "402"),
-                new KeyValuePair<int, string>(403, "403"),
-                new KeyValuePair<int, string>(404, "404"),
-                new KeyValuePair<int, string>(405, "405"),
-            };
+        {
+            new KeyValuePair<int, string>(401, "401"),
+            new KeyValuePair<int, string>(402, "402"),
+            new KeyValuePair<int, string>(403, "403"),
+            new KeyValuePair<int, string>(404, "404"),
+            new KeyValuePair<int, string>(405, "405"),
+        };
             dictionary.AddRange(temp);
             Assert.AreEqual(20, dictionary.Count);
             Assert.AreEqual("401", dictionary[401]);
@@ -230,11 +228,11 @@ namespace OrderedDictionary.Tests
             Assert.AreEqual(TestData.Count - 3, dictionary.Count);
 
             List<string> deletedKeys = new List<string>
-            {
-                "a",
-                "b",
-                "c"
-            };
+        {
+            "a",
+            "b",
+            "c"
+        };
             foreach ((string key, string value) in TestData)
             {
                 if (deletedKeys.Contains(key))
@@ -294,6 +292,48 @@ namespace OrderedDictionary.Tests
             int i = 0;
             foreach (var x in dictionary)
                 Assert.AreEqual(TestData[i++].Item2, x);
+        }
+
+        [TestMethod]
+        public void TestComparer()
+        {
+            var dictionary = new OrderedDictionary<string, string>(StringComparer.Ordinal)
+            {
+                { "Abc", "1" },
+                { "Def", "2" },
+                { "Ghi", "3" },
+                { "Jkl", "4" },
+                { "Mno", "5" }
+            };
+
+            Assert.AreEqual("1", dictionary.ByIndex[0]);
+            Assert.AreEqual("2", dictionary.ByIndex[1]);
+            Assert.AreEqual("3", dictionary.ByIndex[2]);
+            Assert.AreEqual("4", dictionary.ByIndex[3]);
+            Assert.AreEqual("5", dictionary.ByIndex[4]);
+
+            Assert.AreEqual(5, dictionary.Count);
+            Assert.IsFalse(dictionary.Contains("AbC"));
+            Assert.IsFalse(dictionary.Contains("def"));
+            Assert.IsFalse(dictionary.Contains("GHI"));
+            Assert.IsFalse(dictionary.Contains("jKL"));
+            Assert.IsFalse(dictionary.Contains("MNO"));
+
+            dictionary = new OrderedDictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "Abc", "1" },
+                { "Def", "2" },
+                { "Ghi", "3" },
+                { "Jkl", "4" },
+                { "Mno", "5" }
+            };
+
+            Assert.AreEqual(5, dictionary.Count);
+            Assert.IsTrue(dictionary.TryGetValue("AbC", out string _));
+            Assert.IsTrue(dictionary.TryGetValue("def", out string _));
+            Assert.IsTrue(dictionary.TryGetValue("GHI", out string _));
+            Assert.IsTrue(dictionary.TryGetValue("jKL", out string _));
+            Assert.IsTrue(dictionary.TryGetValue("MNO", out string _));
         }
     }
 }

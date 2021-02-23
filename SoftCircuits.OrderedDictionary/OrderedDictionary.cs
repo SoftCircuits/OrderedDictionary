@@ -1,9 +1,10 @@
-﻿// Copyright (c) 2020 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2020-2021 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace SoftCircuits.Collections
@@ -12,7 +13,7 @@ namespace SoftCircuits.Collections
     /// Implements a dictionary that also manages an ordered, indexable
     /// list of its items.
     /// </summary>
-    public class OrderedDictionary<TKey, TValue> : IEnumerable<TValue>, IDictionary<TKey, TValue>
+    public class OrderedDictionary<TKey, TValue> : IEnumerable<TValue>, IDictionary<TKey, TValue> where TKey : notnull
     {
         private readonly List<TValue> Items;
         private readonly Dictionary<TKey, int> IndexLookup;
@@ -43,6 +44,7 @@ namespace SoftCircuits.Collections
         {
             Items = new List<TValue>();
             IndexLookup = new Dictionary<TKey, int>(comparer);
+            ByIndex = new ListIndexer<TValue>(Items);
         }
 
         /// <summary>
@@ -132,7 +134,11 @@ namespace SoftCircuits.Collections
         /// <param name="key">Specifies the key of the item to return.</param>
         /// <param name="value">Returns the value with the specified key.</param>
         /// <returns>True if the item was found and returned, otherwise false.</returns>
+#if NETSTANDARD2_0
         public bool TryGetValue(TKey key, out TValue value)
+#else
+        public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
+#endif
         {
             if (IndexLookup.TryGetValue(key, out int index))
             {
@@ -250,7 +256,7 @@ namespace SoftCircuits.Collections
         /// </summary>
         public bool IsReadOnly => false;
 
-        #region IEnumerable
+#region IEnumerable
 
         public IEnumerator<TValue> GetEnumerator() => Items.GetEnumerator();
 
@@ -261,7 +267,7 @@ namespace SoftCircuits.Collections
             throw new NotImplementedException();
         }
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Removes the item with the given index from <see cref="IndexLookup"></see>.
@@ -295,10 +301,5 @@ namespace SoftCircuits.Collections
             }
             IndexLookup.Add(key, index);
         }
-
-
-
     }
-
-
 }
