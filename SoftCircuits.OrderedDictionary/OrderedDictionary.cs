@@ -15,13 +15,13 @@ namespace SoftCircuits.Collections
     /// </summary>
     public class OrderedDictionary<TKey, TValue> : IEnumerable<TValue>, IDictionary<TKey, TValue> where TKey : notnull
     {
-        private readonly List<TValue> Items;
+        private readonly List<KeyValuePair<TKey, TValue>> Items;
         private readonly Dictionary<TKey, int> IndexLookup;
 
         /// <summary>
         /// Gets or sets an item value using its 0-based, ordered index number.
         /// </summary>
-        public ListIndexer<TValue> ByIndex { get; }
+        public ListIndexer<TKey, TValue> ByIndex { get; }
 
         /// <summary>
         /// Constructs a new <see cref="OrderedDictionary{TKey, TValue}"></see>
@@ -29,9 +29,9 @@ namespace SoftCircuits.Collections
         /// </summary>
         public OrderedDictionary()
         {
-            Items = new List<TValue>();
-            IndexLookup = new Dictionary<TKey, int>();
-            ByIndex = new ListIndexer<TValue>(Items);
+            Items = new();
+            IndexLookup = new();
+            ByIndex = new(Items);
         }
 
         /// <summary>
@@ -42,9 +42,9 @@ namespace SoftCircuits.Collections
         /// the dictionary.</param>
         public OrderedDictionary(IEqualityComparer<TKey> comparer)
         {
-            Items = new List<TValue>();
-            IndexLookup = new Dictionary<TKey, int>(comparer);
-            ByIndex = new ListIndexer<TValue>(Items);
+            Items = new();
+            IndexLookup = new(comparer);
+            ByIndex = new(Items);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace SoftCircuits.Collections
         public void Add(TKey key, TValue value)
         {
             int index = Items.Count;
-            Items.Add(value);
+            Items.Add(new(key, value));
             IndexLookup.Add(key, index);
         }
 
@@ -102,7 +102,7 @@ namespace SoftCircuits.Collections
                 Add(key, value);
             else
             {
-                Items.Insert(index, value);
+                Items.Insert(index, new(key, value));
                 InsertIndexLookupItem(key, index);
             }
         }
@@ -118,11 +118,11 @@ namespace SoftCircuits.Collections
         /// <param name="key">The key of the value to get or set.</param>
         public TValue this[TKey key]
         {
-            get => Items[IndexLookup[key]];
+            get => Items[IndexLookup[key]].Value;
             set
             {
                 if (IndexLookup.ContainsKey(key))
-                    Items[IndexLookup[key]] = value;
+                    Items[IndexLookup[key]] = new(key, value);
                 else
                     Add(key, value);
             }
@@ -134,15 +134,15 @@ namespace SoftCircuits.Collections
         /// <param name="key">Specifies the key of the item to return.</param>
         /// <param name="value">Returns the value with the specified key.</param>
         /// <returns>True if the item was found and returned, otherwise false.</returns>
-#if NETSTANDARD2_0
-        public bool TryGetValue(TKey key, out TValue value)
-#else
+#if !NETSTANDARD2_0
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
+#else
+        public bool TryGetValue(TKey key, out TValue value)
 #endif
         {
             if (IndexLookup.TryGetValue(key, out int index))
             {
-                value = Items[index];
+                value = Items[index].Value;
                 return true;
             }
             value = default;
@@ -235,39 +235,41 @@ namespace SoftCircuits.Collections
             if (index + Count > array.Length)
                 throw new ArgumentException("Target array is not large enough to copy items.");
 
-            foreach (KeyValuePair<TKey, int> pair in IndexLookup)
-                array[index++] = new KeyValuePair<TKey, TValue>(pair.Key, Items[pair.Value]);
+            Items.CopyTo(array, index);
         }
 
         /// <summary>
-        /// Returns all the keys in the collection. Returns a copy of the internal
-        /// list.
+        /// Returns an ordered list of the keys in the collection.
         /// </summary>
-        public ICollection<TKey> Keys => new List<TKey>(IndexLookup.Keys);
+        public ICollection<TKey> Keys => new List<TKey>(Items.Select(i => i.Key));
 
         /// <summary>
-        /// Returns all the values in the collection. Returns a copy of the internal
-        /// list.
+        /// Returns an ordered list of the values in the collection.
         /// </summary>
-        public ICollection<TValue> Values => new List<TValue>(Items);
+        public ICollection<TValue> Values => new List<TValue>(Items.Select(i => i.Value));
 
         /// <summary>
         /// Always returns false.
         /// </summary>
         public bool IsReadOnly => false;
 
-#region IEnumerable
+        #region IEnumerable
 
-        public IEnumerator<TValue> GetEnumerator() => Items.GetEnumerator();
+        /// <summary>
+        /// Returns an <see cref="IEnumerator"/> that iterates through the values in the collection.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<TValue> GetEnumerator()
+        {
+            foreach (var item in Items)
+                yield return item.Value;
+        }
 
         IEnumerator IEnumerable.GetEnumerator() => Items.GetEnumerator();
 
-        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() => Items.GetEnumerator();
 
-#endregion
+        #endregion
 
         /// <summary>
         /// Removes the item with the given index from <see cref="IndexLookup"></see>.

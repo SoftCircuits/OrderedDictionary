@@ -3,6 +3,7 @@ using SoftCircuits.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace OrderedDictionaryTests
 {
@@ -19,10 +20,10 @@ namespace OrderedDictionaryTests
             {
                 TestData.Add((c.ToString(), new string(new char[]
                 {
-                c,
-                (char)(c + 1),
-                (char)(c + 2),
-                (char)(c + 3),
+                    c,
+                    (char)(c + 1),
+                    (char)(c + 2),
+                    (char)(c + 3),
                 })));
             }
         }
@@ -31,7 +32,7 @@ namespace OrderedDictionaryTests
         public void TestAdd()
         {
             // Index initializers
-            OrderedDictionary<int, string> dictionary = new OrderedDictionary<int, string>
+            OrderedDictionary<int, string> dictionary = new()
             {
                 [101] = "101",
                 [102] = "102",
@@ -73,14 +74,14 @@ namespace OrderedDictionaryTests
             Assert.AreEqual("305", dictionary[305]);
 
             // Add range
-            List<KeyValuePair<int, string>> temp = new List<KeyValuePair<int, string>>
-        {
-            new KeyValuePair<int, string>(401, "401"),
-            new KeyValuePair<int, string>(402, "402"),
-            new KeyValuePair<int, string>(403, "403"),
-            new KeyValuePair<int, string>(404, "404"),
-            new KeyValuePair<int, string>(405, "405"),
-        };
+            List<KeyValuePair<int, string>> temp = new()
+            {
+                new KeyValuePair<int, string>(401, "401"),
+                new KeyValuePair<int, string>(402, "402"),
+                new KeyValuePair<int, string>(403, "403"),
+                new KeyValuePair<int, string>(404, "404"),
+                new KeyValuePair<int, string>(405, "405"),
+            };
             dictionary.AddRange(temp);
             Assert.AreEqual(20, dictionary.Count);
             Assert.AreEqual("401", dictionary[401]);
@@ -90,7 +91,7 @@ namespace OrderedDictionaryTests
             Assert.AreEqual("405", dictionary[405]);
 
             // Add dictionary
-            OrderedDictionary<int, string> temp2 = new OrderedDictionary<int, string>
+            OrderedDictionary<int, string> temp2 = new()
             {
                 [501] = "501",
                 [502] = "502",
@@ -227,12 +228,12 @@ namespace OrderedDictionaryTests
             Assert.IsFalse(dictionary.Remove("c"));
             Assert.AreEqual(TestData.Count - 3, dictionary.Count);
 
-            List<string> deletedKeys = new List<string>
-        {
-            "a",
-            "b",
-            "c"
-        };
+            List<string> deletedKeys = new()
+            {
+                "a",
+                "b",
+                "c"
+            };
             foreach ((string key, string value) in TestData)
             {
                 if (deletedKeys.Contains(key))
@@ -290,8 +291,23 @@ namespace OrderedDictionaryTests
             var dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
 
             int i = 0;
-            foreach (var x in dictionary)
+            foreach (string x in dictionary)
                 Assert.AreEqual(TestData[i++].Item2, x);
+
+            i = 0;
+            foreach (string x in dictionary.Values)
+                Assert.AreEqual(TestData[i++].Item2, x);
+
+            i = 0;
+            foreach (string x in dictionary.Keys)
+                Assert.AreEqual(TestData[i++].Item1, x);
+
+            i = 0;
+            foreach (KeyValuePair<string, string> pair in (IEnumerable<KeyValuePair<string, string>>)dictionary)
+            {
+                Assert.AreEqual(TestData[i].Item1, pair.Key);
+                Assert.AreEqual(TestData[i++].Item2, pair.Value);
+            }
         }
 
         [TestMethod]

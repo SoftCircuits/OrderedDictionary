@@ -24,7 +24,7 @@ namespace SoftCircuits.Collections
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            OrderedDictionary<TKey, TSource> dictionary = new OrderedDictionary<TKey, TSource>();
+            OrderedDictionary<TKey, TSource> dictionary = new();
             foreach (TSource item in source)
                 dictionary.Add(keySelector(item), item);
             return dictionary;
@@ -48,7 +48,7 @@ namespace SoftCircuits.Collections
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            OrderedDictionary<TKey, TSource> dictionary = new OrderedDictionary<TKey, TSource>(comparer);
+            OrderedDictionary<TKey, TSource> dictionary = new(comparer);
             foreach (TSource item in source)
                 dictionary.Add(keySelector(item), item);
             return dictionary;
@@ -74,7 +74,7 @@ namespace SoftCircuits.Collections
             if (elementSelector == null)
                 throw new ArgumentNullException(nameof(elementSelector));
 
-            OrderedDictionary<TKey, TElement> dictionary = new OrderedDictionary<TKey, TElement>();
+            OrderedDictionary<TKey, TElement> dictionary = new();
             foreach (TSource item in source)
                 dictionary.Add(keySelector(item), elementSelector(item));
             return dictionary;
@@ -102,7 +102,7 @@ namespace SoftCircuits.Collections
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            OrderedDictionary<TKey, TElement> dictionary = new OrderedDictionary<TKey, TElement>(comparer);
+            OrderedDictionary<TKey, TElement> dictionary = new(comparer);
             foreach (TSource item in source)
                 dictionary.Add(keySelector(item), elementSelector(item));
             return dictionary;
