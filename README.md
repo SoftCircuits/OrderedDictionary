@@ -42,14 +42,14 @@ dictionary.Add(127, "Gary Wilson");
 dictionary.Add(187, "Bill Jackson");
 dictionary.Add(214, "Cheryl Hansen");
 
-dictionary.Insert(2, 134, "Add Carpenter");
+dictionary.Insert(2, 134, "Ann Carpenter");
 
 Assert.AreEqual("Bob Smith", dictionary[101]);
 Assert.AreEqual("Bob Smith", dictionary.ByIndex[0]);
 Assert.AreEqual("Gary Wilson", dictionary[127]);
 Assert.AreEqual("Gary Wilson", dictionary.ByIndex[1]);
-Assert.AreEqual("Add Carpenter", dictionary[134]);
-Assert.AreEqual("Add Carpenter", dictionary.ByIndex[2]);
+Assert.AreEqual("Ann Carpenter", dictionary[134]);
+Assert.AreEqual("Ann Carpenter", dictionary.ByIndex[2]);
 Assert.AreEqual("Bill Jackson", dictionary[187]);
 Assert.AreEqual("Bill Jackson", dictionary.ByIndex[3]);
 Assert.AreEqual("Cheryl Hansen", dictionary[214]);
@@ -68,7 +68,7 @@ OrderedDictionary<int, string> dictionary = new()
     [214] = "Cheryl Hansen",
 };
 
-dictionary.Remove(134);
+dictionary.Remove(134); // Removes 134 - Add Carpenter
 dictionary.RemoveAt(2); // Removes 187 - Bill Jackson
 
 Assert.AreEqual(5 - 2, dictionary.Count);
@@ -79,7 +79,7 @@ Assert.IsFalse(dictionary.ContainsKey(187));
 Assert.IsTrue(dictionary.ContainsKey(214));
 ```
 
-You can iterate through an `OrderedDictionary` using `foreach.
+You can also iterate through an `OrderedDictionary` using `foreach`.
 
 ```cs
 foreach (KeyValuePair<int, string> item in dictionary)
