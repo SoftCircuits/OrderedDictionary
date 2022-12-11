@@ -172,7 +172,7 @@ namespace OrderedDictionaryTests
             // Verify original items still intact
             foreach ((string key, string value) in TestData)
             {
-                Assert.IsTrue(dictionary.TryGetValue(key, out string result));
+                Assert.IsTrue(dictionary.TryGetValue(key, out string? result));
                 Assert.AreEqual(value, result);
             }
         }
@@ -197,7 +197,7 @@ namespace OrderedDictionaryTests
             foreach ((string key, string value) in TestData)
             {
                 Assert.AreEqual(value, dictionary[key]);
-                Assert.IsTrue(dictionary.TryGetValue(key, out string result));
+                Assert.IsTrue(dictionary.TryGetValue(key, out string? result));
                 Assert.AreEqual(value, result);
             }
             for (int i = 0; i < TestData.Count; i++)
@@ -218,7 +218,7 @@ namespace OrderedDictionaryTests
         public void TestRemove()
         {
             var dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
-            string result;
+            string? result;
 
             // Remove
             Assert.IsTrue(dictionary.Remove("a"));
@@ -335,7 +335,7 @@ namespace OrderedDictionaryTests
             Assert.IsFalse(dictionary.ContainsValue("200"));
             Assert.IsFalse(dictionary.ContainsValue("ABC"));
             Assert.IsFalse(dictionary.ContainsValue("xyz"));
-            Assert.IsFalse(dictionary.ContainsValue("_"));
+            Assert.IsFalse(dictionary.ContainsValue(null!));
 
             Assert.IsFalse(dictionary.ContainsKey("AbC"));
             Assert.IsFalse(dictionary.ContainsKey("def"));
