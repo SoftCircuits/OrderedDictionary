@@ -10,16 +10,10 @@
     <Authors>Jonathan Wood</Authors>
     <Company>SoftCircuits</Company>
     <Product>OrderedDictionary</Product>
-    <Copyright>Copyright © 2020-2022 SoftCircuits</Copyright>
-    <PackageReleaseNotes>Added the ContainsValue() method; Minor code changes; Reworked documentation and unit tests.
-
-BREAKING CHANGES:
-Default enumerator now iterates the KeyValuePair&lt;TKey, TValue&gt;s rather than iterating the values. To iterate values, use the Values property. To iterate keys, use the Keys property.
-
-The `Contains` method now looks for a matching KeyValuePair&lt;TKey, TValue&gt; using the default comparer, instead of looking for a matching key. An overload is provided that accepts a custom equality comparer.
-</PackageReleaseNotes>
+    <Copyright>Copyright © 2020-2021 SoftCircuits</Copyright>
+    <PackageReleaseNotes>Added .NET 6.0 target; Can now retrieve ordered keys; Miscellaneous enhancements.</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <PackageTags>collections; list; ordered dictionary; ordered-dictionary; .net</PackageTags>
+    <PackageTags>collections list ordered dictionary ordered-dictionary .net</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/SoftCircuits/OrderedDictionary</RepositoryUrl>
     <PackageProjectUrl>https://github.com/SoftCircuits/OrderedDictionary</PackageProjectUrl>

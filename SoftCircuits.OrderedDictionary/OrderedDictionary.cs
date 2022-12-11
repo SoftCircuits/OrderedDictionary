@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2020-2021 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2020-2022 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
@@ -13,7 +13,7 @@ namespace SoftCircuits.Collections
     /// Implements a dictionary that also manages an ordered, indexable
     /// list of its items.
     /// </summary>
-    public class OrderedDictionary<TKey, TValue> : IEnumerable<TValue>, IDictionary<TKey, TValue> where TKey : notnull
+    public class OrderedDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>, IDictionary<TKey, TValue> where TKey : notnull
     {
         private readonly List<KeyValuePair<TKey, TValue>> Items;
         private readonly Dictionary<TKey, int> IndexLookup;
@@ -133,7 +133,7 @@ namespace SoftCircuits.Collections
         /// </summary>
         /// <param name="key">Specifies the key of the item to return.</param>
         /// <param name="value">Returns the value with the specified key.</param>
-        /// <returns>True if the item was found and returned, otherwise false.</returns>
+        /// <returns>True if the collection contains the specified item, false otherwise.</returns>
 #if !NETSTANDARD2_0
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
 #else
@@ -150,19 +150,33 @@ namespace SoftCircuits.Collections
         }
 
         /// <summary>
+        /// Returns true if the collection contains the specified item. Uses the default comparer.
+        /// </summary>
+        /// <param name="item">The item to find.</param>
+        /// <returns>True if the collection contains the specified item, false otherwise.</returns>
+        public bool Contains(KeyValuePair<TKey, TValue> item) => Items.Contains(item);
+
+        /// <summary>
+        /// Returns true if the collection contains the specified item. Uses the specified comparer.
+        /// </summary>
+        /// <param name="item">The item to find.</param>
+        /// <param name="comparer">An equality comparer to compare values.</param>
+        /// <returns>True if the collection contains the specified item, false otherwise.</returns>
+        public bool Contains(KeyValuePair<TKey, TValue> item, IEqualityComparer<KeyValuePair<TKey, TValue>> comparer) => Items.Contains(item, comparer);
+
+        /// <summary>
         /// Returns true if the collection contains the specified item key.
         /// </summary>
-        /// <param name="key">The key associated with the item to return.</param>
-        /// <returns>True if the collection contains the key, false otherwise.</returns>
+        /// <param name="key">The key to find.</param>
+        /// <returns>True if the collection contains the specified key, false otherwise.</returns>
         public bool ContainsKey(TKey key) => IndexLookup.ContainsKey(key);
 
         /// <summary>
-        /// Returns true if the collection contains the specified item. This method only
-        /// checks for an item with the specified key.
+        /// Returns true if the collection contains the specified item value.
         /// </summary>
-        /// <param name="item">The item to find.</param>
-        /// <returns>True if the collection contains the item, false otherwise.</returns>
-        public bool Contains(KeyValuePair<TKey, TValue> item) => ContainsKey(item.Key);
+        /// <param name="value">The value to find.</param>
+        /// <returns>True if the collection contains the specified value, false otherwise.</returns>
+        public bool ContainsValue(TValue value) => Items.Any(i => Comparer.Equals(i.Value, value));
 
         /// <summary>
         /// Returns the index of the item associated with the specified key. Returns -1 if
@@ -233,7 +247,7 @@ namespace SoftCircuits.Collections
             if (index < 0 || index > array.Length)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (index + Count > array.Length)
-                throw new ArgumentException("Target array is not large enough to copy items.");
+                throw new ArgumentException("Target array is not large enough to hold copied items.");
 
             Items.CopyTo(array, index);
         }
@@ -256,18 +270,15 @@ namespace SoftCircuits.Collections
         #region IEnumerable
 
         /// <summary>
-        /// Returns an <see cref="IEnumerator"/> that iterates through the values in the collection.
+        /// Returns an <see cref="IEnumerator"/> that iterates through the <see cref="KeyValuePair"/>s in the collection.
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<TValue> GetEnumerator()
-        {
-            foreach (var item in Items)
-                yield return item.Value;
-        }
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => Items.GetEnumerator();
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
         IEnumerator IEnumerable.GetEnumerator() => Items.GetEnumerator();
-
-        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() => Items.GetEnumerator();
 
         #endregion
 

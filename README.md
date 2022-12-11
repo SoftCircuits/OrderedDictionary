@@ -15,7 +15,7 @@ OrderedDictionary is a .NET library that implements an ordered dictionary. It pr
 OrderedDictionary can be initialized used like any other dictionary. This includes initializing with *index initializers*.
 
 ```cs
-OrderedDictionary<int, string> dictionary = new OrderedDictionary<int, string>
+OrderedDictionary<int, string> dictionary = new()
 {
     [101] = "Bob Smith",
     [127] = "Gary Wilson",
@@ -35,7 +35,7 @@ Assert.AreEqual("Bill Jackson", dictionary.ByIndex[3]);
 You can add items using the `Add()` method, and you can also insert them at a particular location.
 
 ```cs
-OrderedDictionary<int, string> dictionary = new OrderedDictionary<int, string>();
+OrderedDictionary<int, string> dictionary = new();
 
 dictionary.Add(101, "Bob Smith");
 dictionary.Add(127, "Gary Wilson");
@@ -59,7 +59,7 @@ Assert.AreEqual("Cheryl Hansen", dictionary.ByIndex[4]);
 Items can also be removed using either the key or index.
 
 ```cs
-OrderedDictionary<int, string> dictionary = new OrderedDictionary<int, string>
+OrderedDictionary<int, string> dictionary = new()
 {
     [101] = "Bob Smith",
     [127] = "Gary Wilson",
@@ -79,4 +79,16 @@ Assert.IsFalse(dictionary.ContainsKey(187));
 Assert.IsTrue(dictionary.ContainsKey(214));
 ```
 
-The library also implements several versions of the `ToOrderedList()` extension method, which will convert any `IEnumerable<>` to an `OrderedDictionary<>`.
+You can iterate through an `OrderedDictionary` using `foreach.
+
+```cs
+foreach (KeyValuePair<int, string> item in dictionary)
+{
+    Console.WriteLine(item.Key);
+    Console.WriteLine(item.Value);
+}
+```
+
+To iterate the keys or values only, you can use the `Keys` or `Values` properies.
+
+The library also defines the `ToOrderedDictionary()` extension method with several overloads for converting `IEnumerable<>`s to `OrderedDictionary<>`s.

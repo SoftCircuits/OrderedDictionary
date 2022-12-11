@@ -3,7 +3,6 @@ using SoftCircuits.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace OrderedDictionaryTests
 {
@@ -107,6 +106,7 @@ namespace OrderedDictionaryTests
             Assert.AreEqual("504", dictionary[504]);
             Assert.AreEqual("505", dictionary[505]);
 
+            // Confirm keys
             Assert.IsTrue(dictionary.ContainsKey(101));
             Assert.IsTrue(dictionary.ContainsKey(102));
             Assert.IsTrue(dictionary.ContainsKey(103));
@@ -137,6 +137,7 @@ namespace OrderedDictionaryTests
             Assert.IsTrue(dictionary.ContainsKey(104));
             Assert.IsTrue(dictionary.ContainsKey(105));
 
+            // Test bad keys
             Assert.IsFalse(dictionary.ContainsKey(1));
             Assert.IsFalse(dictionary.ContainsKey(10));
             Assert.IsFalse(dictionary.ContainsKey(100));
@@ -286,28 +287,24 @@ namespace OrderedDictionaryTests
         }
 
         [TestMethod]
-        public void TestEnumerator()
+        public void TestEnumerators()
         {
             var dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
 
             int i = 0;
-            foreach (string x in dictionary)
-                Assert.AreEqual(TestData[i++].Item2, x);
-
-            i = 0;
-            foreach (string x in dictionary.Values)
-                Assert.AreEqual(TestData[i++].Item2, x);
+            foreach (KeyValuePair<string, string> pair in dictionary)
+            {
+                Assert.AreEqual(TestData[i].Item1, pair.Key);
+                Assert.AreEqual(TestData[i++].Item2, pair.Value);
+            }
 
             i = 0;
             foreach (string x in dictionary.Keys)
                 Assert.AreEqual(TestData[i++].Item1, x);
 
             i = 0;
-            foreach (KeyValuePair<string, string> pair in (IEnumerable<KeyValuePair<string, string>>)dictionary)
-            {
-                Assert.AreEqual(TestData[i].Item1, pair.Key);
-                Assert.AreEqual(TestData[i++].Item2, pair.Value);
-            }
+            foreach (string x in dictionary.Values)
+                Assert.AreEqual(TestData[i++].Item2, x);
         }
 
         [TestMethod]
@@ -321,19 +318,36 @@ namespace OrderedDictionaryTests
                 { "Jkl", "4" },
                 { "Mno", "5" }
             };
-
+            Assert.AreEqual(5, dictionary.Count);
             Assert.AreEqual("1", dictionary.ByIndex[0]);
             Assert.AreEqual("2", dictionary.ByIndex[1]);
             Assert.AreEqual("3", dictionary.ByIndex[2]);
             Assert.AreEqual("4", dictionary.ByIndex[3]);
             Assert.AreEqual("5", dictionary.ByIndex[4]);
 
-            Assert.AreEqual(5, dictionary.Count);
-            Assert.IsFalse(dictionary.Contains("AbC"));
-            Assert.IsFalse(dictionary.Contains("def"));
-            Assert.IsFalse(dictionary.Contains("GHI"));
-            Assert.IsFalse(dictionary.Contains("jKL"));
-            Assert.IsFalse(dictionary.Contains("MNO"));
+            // Test ContainsValue
+            Assert.IsTrue(dictionary.ContainsValue("1"));
+            Assert.IsTrue(dictionary.ContainsValue("2"));
+            Assert.IsTrue(dictionary.ContainsValue("3"));
+            Assert.IsTrue(dictionary.ContainsValue("4"));
+            Assert.IsTrue(dictionary.ContainsValue("5"));
+            Assert.IsFalse(dictionary.ContainsValue("0"));
+            Assert.IsFalse(dictionary.ContainsValue("200"));
+            Assert.IsFalse(dictionary.ContainsValue("ABC"));
+            Assert.IsFalse(dictionary.ContainsValue("xyz"));
+            Assert.IsFalse(dictionary.ContainsValue("_"));
+
+            Assert.IsFalse(dictionary.ContainsKey("AbC"));
+            Assert.IsFalse(dictionary.ContainsKey("def"));
+            Assert.IsFalse(dictionary.ContainsKey("GHI"));
+            Assert.IsFalse(dictionary.ContainsKey("jKL"));
+            Assert.IsFalse(dictionary.ContainsKey("MNO"));
+
+            Assert.IsFalse(dictionary.TryGetValue("AbC", out string _));
+            Assert.IsFalse(dictionary.TryGetValue("def", out string _));
+            Assert.IsFalse(dictionary.TryGetValue("GHI", out string _));
+            Assert.IsFalse(dictionary.TryGetValue("jKL", out string _));
+            Assert.IsFalse(dictionary.TryGetValue("MNO", out string _));
 
             dictionary = new OrderedDictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -343,13 +357,23 @@ namespace OrderedDictionaryTests
                 { "Jkl", "4" },
                 { "Mno", "5" }
             };
-
             Assert.AreEqual(5, dictionary.Count);
+
+            Assert.IsTrue(dictionary.ContainsKey("AbC"));
+            Assert.IsTrue(dictionary.ContainsKey("def"));
+            Assert.IsTrue(dictionary.ContainsKey("GHI"));
+            Assert.IsTrue(dictionary.ContainsKey("jKL"));
+            Assert.IsTrue(dictionary.ContainsKey("MNO"));
+
             Assert.IsTrue(dictionary.TryGetValue("AbC", out string _));
             Assert.IsTrue(dictionary.TryGetValue("def", out string _));
             Assert.IsTrue(dictionary.TryGetValue("GHI", out string _));
             Assert.IsTrue(dictionary.TryGetValue("jKL", out string _));
             Assert.IsTrue(dictionary.TryGetValue("MNO", out string _));
+
+            Assert.IsTrue(dictionary.Contains(dictionary.First()));
+            Assert.IsTrue(dictionary.Contains(dictionary.Last()));
+            Assert.IsFalse(dictionary.Contains(new KeyValuePair<string, string>()));
         }
     }
 }
