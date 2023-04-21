@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2020-2022 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2020-2023 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
@@ -121,8 +121,8 @@ namespace SoftCircuits.Collections
             get => Items[IndexLookup[key]].Value;
             set
             {
-                if (IndexLookup.ContainsKey(key))
-                    Items[IndexLookup[key]] = new(key, value);
+                if (IndexLookup.TryGetValue(key, out int index))
+                    Items[index] = new(key, value);
                 else
                     Add(key, value);
             }
@@ -134,10 +134,10 @@ namespace SoftCircuits.Collections
         /// <param name="key">Specifies the key of the item to return.</param>
         /// <param name="value">Returns the value with the specified key.</param>
         /// <returns>True if the collection contains the specified item, false otherwise.</returns>
-#if !NETSTANDARD2_0
-        public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
-#else
+#if NETSTANDARD2_0
         public bool TryGetValue(TKey key, out TValue value)
+#else
+        public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
 #endif
         {
             if (IndexLookup.TryGetValue(key, out int index))
