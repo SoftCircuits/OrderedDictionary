@@ -11,8 +11,7 @@
     <Company>SoftCircuits</Company>
     <Product>OrderedDictionary</Product>
     <Copyright>Copyright © 2020-2023 SoftCircuits</Copyright>
-    <PackageReleaseNotes>Added dependency on .NET 7.0; Minor code optimizations.
-</PackageReleaseNotes>
+    <PackageReleaseNotes>Keys and Values property now return type IList&lt;T&gt; when not accessed via an IDictionary&lt;TKey, TValue&gt; interface; Minor code optimizations; Added direct support for .NET 7.0.</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageTags>collections; list; ordered dictionary; ordered-dictionary; .net</PackageTags>
     <RepositoryType>git</RepositoryType>
