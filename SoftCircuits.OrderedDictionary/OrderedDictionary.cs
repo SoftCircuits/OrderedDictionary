@@ -255,12 +255,14 @@ namespace SoftCircuits.Collections
         /// <summary>
         /// Returns an ordered list of the keys in the collection.
         /// </summary>
-        public ICollection<TKey> Keys => new List<TKey>(Items.Select(i => i.Key));
+        public IList<TKey> Keys => new List<TKey>(Items.Select(i => i.Key));
+        ICollection<TKey> IDictionary<TKey, TValue>.Keys => Keys;
 
         /// <summary>
         /// Returns an ordered list of the values in the collection.
         /// </summary>
-        public ICollection<TValue> Values => new List<TValue>(Items.Select(i => i.Value));
+        public IList<TValue> Values => new List<TValue>(Items.Select(i => i.Value));
+        ICollection<TValue> IDictionary<TKey, TValue>.Values => Values;
 
         /// <summary>
         /// Always returns false.
