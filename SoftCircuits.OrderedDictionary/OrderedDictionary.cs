@@ -13,7 +13,9 @@ namespace SoftCircuits.Collections
     /// Implements a dictionary that also manages an ordered, indexable
     /// list of its items.
     /// </summary>
-    public class OrderedDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>, IDictionary<TKey, TValue> where TKey : notnull
+    public class OrderedDictionary<TKey, TValue>
+        : IEnumerable<KeyValuePair<TKey, TValue>>, IDictionary<TKey, TValue>, IReadOnlyDictionary<TKey, TValue>
+        where TKey : notnull
     {
         private readonly List<KeyValuePair<TKey, TValue>> Items;
         private readonly Dictionary<TKey, int> IndexLookup;
@@ -255,14 +257,16 @@ namespace SoftCircuits.Collections
         /// <summary>
         /// Returns an ordered list of the keys in the collection.
         /// </summary>
-        public IList<TKey> Keys => new List<TKey>(Items.Select(i => i.Key));
+        public IList<TKey> Keys => Items.Select(i => i.Key).ToList();
         ICollection<TKey> IDictionary<TKey, TValue>.Keys => Keys;
+        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => Keys;
 
         /// <summary>
         /// Returns an ordered list of the values in the collection.
         /// </summary>
-        public IList<TValue> Values => new List<TValue>(Items.Select(i => i.Value));
+        public IList<TValue> Values => Items.Select(i => i.Value).ToList();
         ICollection<TValue> IDictionary<TKey, TValue>.Values => Values;
+        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => Values;
 
         /// <summary>
         /// Always returns false.
