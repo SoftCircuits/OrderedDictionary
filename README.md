@@ -8,7 +8,7 @@ Install-Package SoftCircuits.OrderedDictionary
 
 ## Introduction
 
-OrderedDictionary is a .NET library that implements an ordered dictionary. It provides all the functionality of `Dictionary<TKey, TValue>` but also maintains the items in an ordered list. Items can be added, removed and accessed by key or index. The class implements the `IDictionary` interface.
+OrderedDictionary is a .NET library that implements an ordered dictionary. It provides all the functionality of `Dictionary<TKey, TValue>` but also maintains the items in an ordered list. Items can be added, removed and accessed by key or index. For compatibility, the class implements the `IDictionary` and `IReadOnlyDictionary` interfaces.
 
 ## Examples
 
