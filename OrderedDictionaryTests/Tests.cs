@@ -14,7 +14,7 @@ namespace OrderedDictionaryTests
         public Tests()
         {
             // Initialize test data
-            TestData = new List<(string, string)>();
+            TestData = [];
             for (char c = 'a'; c <= ('z' - 3); c++)
             {
                 TestData.Add((c.ToString(), new string(new char[]
@@ -73,14 +73,14 @@ namespace OrderedDictionaryTests
             Assert.AreEqual("305", dictionary[305]);
 
             // Add range
-            List<KeyValuePair<int, string>> temp = new()
-            {
+            List<KeyValuePair<int, string>> temp =
+            [
                 new KeyValuePair<int, string>(401, "401"),
                 new KeyValuePair<int, string>(402, "402"),
                 new KeyValuePair<int, string>(403, "403"),
                 new KeyValuePair<int, string>(404, "404"),
                 new KeyValuePair<int, string>(405, "405"),
-            };
+            ];
             dictionary.AddRange(temp);
             Assert.AreEqual(20, dictionary.Count);
             Assert.AreEqual("401", dictionary[401]);
@@ -229,12 +229,12 @@ namespace OrderedDictionaryTests
             Assert.IsFalse(dictionary.Remove("c"));
             Assert.AreEqual(TestData.Count - 3, dictionary.Count);
 
-            List<string> deletedKeys = new()
-            {
+            List<string> deletedKeys =
+            [
                 "a",
                 "b",
                 "c"
-            };
+            ];
             foreach ((string key, string value) in TestData)
             {
                 if (deletedKeys.Contains(key))
@@ -255,7 +255,7 @@ namespace OrderedDictionaryTests
             dictionary.RemoveAt(15);   // "u"
             Assert.AreEqual(TestData.Count - 6, dictionary.Count);
 
-            deletedKeys.AddRange(new[] { "d", "t", "u" });
+            deletedKeys.AddRange([ "d", "t", "u" ]);
             foreach ((string key, string value) in TestData)
             {
                 if (deletedKeys.Contains(key))
@@ -277,8 +277,8 @@ namespace OrderedDictionaryTests
         {
             var dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
 
-            List<string> keys = dictionary.Keys.ToList();
-            List<string> values = dictionary.Values.ToList();
+            List<string> keys = [.. dictionary.Keys];
+            List<string> values = [.. dictionary.Values];
             for (int i = 0; i < TestData.Count; i++)
             {
                 Assert.AreEqual(TestData[i].Item1, keys[i]);
@@ -289,11 +289,13 @@ namespace OrderedDictionaryTests
         [TestMethod]
         public void TestIDictionary()
         {
+#pragma warning disable CA1859 // Use concrete types when possible for improved performance
             IDictionary<string, string> dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
+#pragma warning restore CA1859 // Use concrete types when possible for improved performance
 
             int i;
-            List<string> keys = dictionary.Keys.ToList();
-            List<string> values = dictionary.Values.ToList();
+            List<string> keys = [.. dictionary.Keys];
+            List<string> values = [.. dictionary.Values];
             for (i = 0; i < TestData.Count; i++)
             {
                 Assert.AreEqual(TestData[i].Item1, keys[i]);
@@ -316,7 +318,9 @@ namespace OrderedDictionaryTests
         [TestMethod]
         public void TestIReadOnlyDictionary()
         {
+#pragma warning disable CA1859 // Use concrete types when possible for improved performance
             IReadOnlyDictionary<string, string> dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
+#pragma warning restore CA1859 // Use concrete types when possible for improved performance
 
             int i;
             List<string> keys = dictionary.Keys.ToList();

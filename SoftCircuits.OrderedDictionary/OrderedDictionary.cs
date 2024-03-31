@@ -101,7 +101,9 @@ namespace SoftCircuits.Collections
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             if (index == Count)
+            {
                 Add(key, value);
+            }
             else
             {
                 Items.Insert(index, new(key, value));

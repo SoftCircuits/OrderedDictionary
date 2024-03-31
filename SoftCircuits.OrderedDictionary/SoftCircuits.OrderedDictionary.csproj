@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0;net5.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.0</TargetFrameworks>
     <Nullable>annotations</Nullable>
     <Nullable Condition="'$(TargetFramework)' != 'netstandard2.0'">enable</Nullable>
     <LangVersion>9.0</LangVersion>
@@ -11,7 +11,7 @@
     <Company>SoftCircuits</Company>
     <Product>OrderedDictionary</Product>
     <Copyright>Copyright © 2020-2024 SoftCircuits</Copyright>
-    <PackageReleaseNotes>The library now implements IReadOnlyDictionary&lt;TKey, TValue&gt;; Minor miscellaneous changes.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added direct support for .NET 8; Removed direct support for now deprecated .NET 5.0; minor tweaks.</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageTags>collections; list; ordered dictionary; ordered-dictionary; .net</PackageTags>
     <RepositoryType>git</RepositoryType>
@@ -21,7 +21,7 @@
     <PackageIcon>Logo_64x64.png</PackageIcon>
     <PackageIconUrl />
     <Description>.NET library that implements an ordered dictionary. Provides all the functionality of Dictionary&lt;TKey, TValue&gt; but also maintains the items in an ordered list. Items can be added, removed and accessed by key or index. Implements IDictionary.</Description>
-    <Version>3.1.0</Version>
+    <Version>3.2.0</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
