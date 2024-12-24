@@ -17,13 +17,13 @@ namespace OrderedDictionaryTests
             TestData = [];
             for (char c = 'a'; c <= ('z' - 3); c++)
             {
-                TestData.Add((c.ToString(), new string(new char[]
-                {
+                TestData.Add((c.ToString(), new string(
+                [
                     c,
                     (char)(c + 1),
                     (char)(c + 2),
                     (char)(c + 3),
-                })));
+                ])));
             }
         }
 
@@ -31,7 +31,7 @@ namespace OrderedDictionaryTests
         public void TestAdd()
         {
             // Index initializers
-            OrderedDictionary<int, string> dictionary = new()
+            SoftCircuits.Collections.OrderedDictionary<int, string> dictionary = new()
             {
                 [101] = "101",
                 [102] = "102",
@@ -90,7 +90,7 @@ namespace OrderedDictionaryTests
             Assert.AreEqual("405", dictionary[405]);
 
             // Add dictionary
-            OrderedDictionary<int, string> temp2 = new()
+            SoftCircuits.Collections.OrderedDictionary<int, string> temp2 = new()
             {
                 [501] = "501",
                 [502] = "502",
@@ -289,9 +289,7 @@ namespace OrderedDictionaryTests
         [TestMethod]
         public void TestIDictionary()
         {
-#pragma warning disable CA1859 // Use concrete types when possible for improved performance
             IDictionary<string, string> dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
-#pragma warning restore CA1859 // Use concrete types when possible for improved performance
 
             int i;
             List<string> keys = [.. dictionary.Keys];
@@ -318,9 +316,7 @@ namespace OrderedDictionaryTests
         [TestMethod]
         public void TestIReadOnlyDictionary()
         {
-#pragma warning disable CA1859 // Use concrete types when possible for improved performance
             IReadOnlyDictionary<string, string> dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
-#pragma warning restore CA1859 // Use concrete types when possible for improved performance
 
             int i;
             List<string> keys = dictionary.Keys.ToList();
@@ -367,13 +363,13 @@ namespace OrderedDictionaryTests
         [TestMethod]
         public void TestComparer()
         {
-            var dictionary = new OrderedDictionary<string, string>(StringComparer.Ordinal)
+            SoftCircuits.Collections.OrderedDictionary<string, string> dictionary = new(StringComparer.Ordinal)
             {
-                { "Abc", "1" },
-                { "Def", "2" },
-                { "Ghi", "3" },
-                { "Jkl", "4" },
-                { "Mno", "5" }
+                ["Abc"] = "1",
+                ["Def"] = "2",
+                ["Ghi"] = "3",
+                ["Jkl"] = "4",
+                ["Mno"] = "5"
             };
             Assert.AreEqual(5, dictionary.Count);
             Assert.AreEqual("1", dictionary.ByIndex[0]);
@@ -406,13 +402,13 @@ namespace OrderedDictionaryTests
             Assert.IsFalse(dictionary.TryGetValue("jKL", out string? _));
             Assert.IsFalse(dictionary.TryGetValue("MNO", out string? _));
 
-            dictionary = new OrderedDictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            dictionary = new(StringComparer.OrdinalIgnoreCase)
             {
-                { "Abc", "1" },
-                { "Def", "2" },
-                { "Ghi", "3" },
-                { "Jkl", "4" },
-                { "Mno", "5" }
+                ["Abc"] = "1",
+                ["Def"] = "2",
+                ["Ghi"] = "3",
+                ["Jkl"] = "4",
+                ["Mno"] = "5"
             };
             Assert.AreEqual(5, dictionary.Count);
 

@@ -31,8 +31,8 @@ namespace SoftCircuits.Collections
         /// </summary>
         public OrderedDictionary()
         {
-            Items = new();
-            IndexLookup = new();
+            Items = [];
+            IndexLookup = [];
             ByIndex = new(Items);
         }
 
@@ -44,7 +44,7 @@ namespace SoftCircuits.Collections
         /// the dictionary.</param>
         public OrderedDictionary(IEqualityComparer<TKey> comparer)
         {
-            Items = new();
+            Items = [];
             IndexLookup = new(comparer);
             ByIndex = new(Items);
         }
@@ -246,8 +246,12 @@ namespace SoftCircuits.Collections
         /// <param name="index">The zero-based index in array at which copying begins.</param>
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int index)
         {
+#if NETSTANDARD2_0
             if (array == null)
                 throw new ArgumentNullException(nameof(array));
+#else
+            ArgumentNullException.ThrowIfNull(array);
+#endif
             if (index < 0 || index > array.Length)
                 throw new ArgumentOutOfRangeException(nameof(index));
             if (index + Count > array.Length)
