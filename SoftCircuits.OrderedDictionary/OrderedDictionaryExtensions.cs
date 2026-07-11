@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2020-2024 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2020-2026 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
@@ -19,12 +19,17 @@ namespace SoftCircuits.Collections
         /// <returns>The newly created <see cref="Dictionary{TKey, TValue}"></see>.</returns>
         public static OrderedDictionary<TKey, TSource> ToOrderedDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector) where TKey : notnull
         {
+#if NETSTANDARD2_0
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
+#else
+            ArgumentNullException.ThrowIfNull(source);
+            ArgumentNullException.ThrowIfNull(keySelector);
+#endif
 
-            OrderedDictionary<TKey, TSource> dictionary = new();
+            OrderedDictionary<TKey, TSource> dictionary = [];
             foreach (TSource item in source)
                 dictionary.Add(keySelector(item), item);
             return dictionary;
@@ -41,12 +46,18 @@ namespace SoftCircuits.Collections
         /// <returns>The newly created <see cref="Dictionary{TKey, TValue}"></see>.</returns>
         public static OrderedDictionary<TKey, TSource> ToOrderedDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer) where TKey : notnull
         {
+#if NETSTANDARD2_0
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
+#else
+            ArgumentNullException.ThrowIfNull(source);
+            ArgumentNullException.ThrowIfNull(keySelector);
+            ArgumentNullException.ThrowIfNull(comparer);
+#endif
 
             OrderedDictionary<TKey, TSource> dictionary = new(comparer);
             foreach (TSource item in source)
@@ -67,14 +78,20 @@ namespace SoftCircuits.Collections
         /// <returns>The newly created <see cref="Dictionary{TKey, TValue}"></see>.</returns>
         public static OrderedDictionary<TKey, TElement> ToOrderedDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector) where TKey : notnull
         {
+#if NETSTANDARD2_0
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
                 throw new ArgumentNullException(nameof(elementSelector));
+#else
+            ArgumentNullException.ThrowIfNull(source);
+            ArgumentNullException.ThrowIfNull(keySelector);
+            ArgumentNullException.ThrowIfNull(elementSelector);
+#endif
 
-            OrderedDictionary<TKey, TElement> dictionary = new();
+            OrderedDictionary<TKey, TElement> dictionary = [];
             foreach (TSource item in source)
                 dictionary.Add(keySelector(item), elementSelector(item));
             return dictionary;
@@ -93,6 +110,7 @@ namespace SoftCircuits.Collections
         /// <returns>The newly created <see cref="Dictionary{TKey, TValue}"></see>.</returns>
         public static OrderedDictionary<TKey, TElement> ToOrderedDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer) where TKey : notnull
         {
+#if NETSTANDARD2_0
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
@@ -101,6 +119,12 @@ namespace SoftCircuits.Collections
                 throw new ArgumentNullException(nameof(elementSelector));
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
+#else
+            ArgumentNullException.ThrowIfNull(source);
+            ArgumentNullException.ThrowIfNull(keySelector);
+            ArgumentNullException.ThrowIfNull(elementSelector);
+            ArgumentNullException.ThrowIfNull(comparer);
+#endif
 
             OrderedDictionary<TKey, TElement> dictionary = new(comparer);
             foreach (TSource item in source)

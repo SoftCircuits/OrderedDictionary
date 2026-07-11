@@ -319,8 +319,8 @@ namespace OrderedDictionaryTests
             IReadOnlyDictionary<string, string> dictionary = TestData.ToOrderedDictionary(x => x.Item1, x => x.Item2);
 
             int i;
-            List<string> keys = dictionary.Keys.ToList();
-            List<string> values = dictionary.Values.ToList();
+            List<string> keys = [.. dictionary.Keys];
+            List<string> values = [.. dictionary.Values];
             for (i = 0; i < TestData.Count; i++)
             {
                 Assert.AreEqual(TestData[i].Item1, keys[i]);

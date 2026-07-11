@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2020-2024 Jonathan Wood (www.softcircuits.com)
+﻿// Copyright (c) 2020-2026 Jonathan Wood (www.softcircuits.com)
 // Licensed under the MIT license.
 //
 using System;
@@ -263,12 +263,12 @@ namespace SoftCircuits.Collections
         /// <summary>
         /// Returns an ordered list of the dictionary keys.
         /// </summary>
-        public IList<TKey> Keys => new List<TKey>(Items.Select(i => i.Key));
+        public IList<TKey> Keys => [.. Items.Select(i => i.Key)];
 
         /// <summary>
         /// Returns an ordered list of the dictionary values.
         /// </summary>
-        public IList<TValue> Values => new List<TValue>(Items.Select(i => i.Value));
+        public IList<TValue> Values => [.. Items.Select(i => i.Value)];
 
         ICollection<TKey> IDictionary<TKey, TValue>.Keys => Keys;
 
